@@ -1,12 +1,14 @@
 (
-	var state, win, chords, roots, bass, duration, font, addChord, pattern, updateButtons;
-    win = Window(\harmony, Rect(0, 0, 500, 240), false);
-    font = Font('Arial', 10);
+	var state, win, chords, roots, bass, duration, font, addChord, chordsLayout, pattern, updateButtons;
     updateButtons = {|array, selected| 
         array.collect({|item, i| 
             if(i != selected, {item.value = 0}, {item.value = 1}) 
         });
     };
+
+    win = Window(\harmony, Rect(0, 0, 300, 240), false);
+    font = Font('Arial', 10);
+    chordsLayout = HLayoutView(win, Rect(180, 0, 120, 240)).background_(Color.new(254/255, 95/255, 85/255, 0.3));
 
     state = (
         labels: (
@@ -81,7 +83,7 @@
             state.chordPattern = state.chordPattern.add(state.currentChord.copy);
             pattern.collect({|ch| ch.remove}); // remove chord pattern
             pattern = state.chordPattern.collect({|ch, i| // redraw from updated state
-                Button(win, Rect(180+(30*i), 10, 30, 30)).font_(font)
+                Button(win, Rect(180+((i%4)*30), trunc(i/4)*30, 30, 30)).font_(font)
                     .states_([
                         [i+1],
                         [i+1, Color.grey(0.2), Color.new(254/255, 95/255, 85/255)]
@@ -96,6 +98,7 @@
                         updateButtons.value(duration, state.currentChord.duration);
                     });
             });
+            updateButtons.value(pattern, state.chordPattern.size - 1);
         });
 
 	win.onClose_({}).front;
