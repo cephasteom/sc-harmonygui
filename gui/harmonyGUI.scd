@@ -1,7 +1,12 @@
 (
-	var state, win, chords, roots, bass, duration, font, addChord, pattern;
+	var state, win, chords, roots, bass, duration, font, addChord, pattern, updateButtons;
     win = Window(\harmony, Rect(0, 0, 500, 240), false);
     font = Font('Arial', 10);
+    updateButtons = {|array, selected| 
+        array.collect({|item, i| 
+            if(i != selected, {item.value = 0}, {item.value = 1}) 
+        });
+    };
 
     state = (
         labels: (
@@ -11,17 +16,13 @@
         ),
         currentChord: (
             root: 0,
-            chord: "",
+            chord: 0,
             bass: 0,
             duration: 0,
         ),
         chordPattern: [ // move this out to central state
-            1,2,3,4,5
         ],
     );
-        
-    addChord = Button(win, Rect(140, 10, 30, 30)).font_(font).states_([["+"]])
-        .action_({});
 
     roots = Array.fill(12, {|i| Button(win, Rect(0, 220-(i*20), 20, 20))});
     roots.collect({|root, i| root
@@ -31,7 +32,8 @@
             [state.labels.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
-            roots.collect({|root, index| if(i != index, {root.value = 0}) }); // reset other buttons
+            updateButtons.value(roots, i);
+            state.currentChord.root = i; // update state
         })
     });
 
@@ -43,7 +45,8 @@
             [state.labels.chords[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
-            chords.collect({|chord, index| if(i != index, {chord.value = 0}) }); // reset other buttons
+            updateButtons.value(chords, i);
+            state.currentChord.chord = i; // update state
         })
     });
 
@@ -55,7 +58,8 @@
             [state.labels.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
-            bass.collect({|bs, index| if(i != index, {bs.value = 0}) }); // reset other buttons
+            updateButtons.value(bass, i);
+            state.currentChord.bass = i; // update state
         })        
     });
 
@@ -67,13 +71,32 @@
             [state.labels.duration[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
-            duration.collect({|dur, index| if(i != index, {dur.value = 0}) }); // reset other buttons
+            updateButtons.value(duration, i);
+            state.currentChord.duration = i; // update state
         })
     });
 
-    pattern = state.chordPattern.collect({|i|
-        Button(win, Rect(180+(30*i), 10, 30, 30)).font_(font).states_([[i]]).action_({});
-    });
+    addChord = Button(win, Rect(140, 10, 30, 30)).font_(font).states_([["+"]])
+        .action_({
+            state.chordPattern = state.chordPattern.add(state.currentChord.copy);
+            pattern.collect({|ch| ch.remove}); // remove chord pattern
+            pattern = state.chordPattern.collect({|ch, i| // redraw from updated state
+                Button(win, Rect(180+(30*i), 10, 30, 30)).font_(font)
+                    .states_([
+                        [i+1],
+                        [i+1, Color.grey(0.2), Color.new(254/255, 95/255, 85/255)]
+                    ])
+                    .action_({
+                        state.chordPattern[i].postln;
+                        state.currentChord = state.chordPattern[i].copy; // replace currentChord
+                        updateButtons.value(pattern, i);
+                        updateButtons.value(roots, state.currentChord.root);
+                        updateButtons.value(chords, state.currentChord.chord);
+                        updateButtons.value(bass, state.currentChord.bass);
+                        updateButtons.value(duration, state.currentChord.duration);
+                    });
+            });
+        });
 
 	win.onClose_({}).front;
 )
