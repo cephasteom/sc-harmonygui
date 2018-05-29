@@ -1,5 +1,5 @@
 (
-	var state, win, chords, roots, bass, duration, font, addChord;
+	var state, win, chords, roots, bass, duration, font, addChord, pattern;
     win = Window(\harmony, Rect(0, 0, 500, 240), false);
     font = Font('Arial', 10);
 
@@ -15,9 +15,9 @@
             bass: 0,
             duration: 0,
         ),
-        chordPattern: ( // move this out to central state
-            
-        ),
+        chordPattern: [ // move this out to central state
+            1,2,3,4,5
+        ],
     );
         
     addChord = Button(win, Rect(140, 10, 30, 30)).font_(font).states_([["+"]])
@@ -69,6 +69,10 @@
         .action_({|button|
             duration.collect({|dur, index| if(i != index, {dur.value = 0}) }); // reset other buttons
         })
+    });
+
+    pattern = state.chordPattern.collect({|i|
+        Button(win, Rect(180+(30*i), 10, 30, 30)).font_(font).states_([[i]]).action_({});
     });
 
 	win.onClose_({}).front;
