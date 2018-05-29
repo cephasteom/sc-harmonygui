@@ -1,19 +1,34 @@
 (
-	var win, chords, roots, bass, duration, labels, font;
+	var state, win, chords, roots, bass, duration, font, addChord;
     win = Window(\harmony, Rect(0, 0, 500, 240), false);
-    labels = (
-        chords: ['maj', 'min', 'aug', 'dim'],
-        notes: ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'],
-        duration: [1,2,3,4,6,8,12,16],
-    );
     font = Font('Arial', 10);
-    
+
+    state = (
+        labels: (
+            chords: ['maj', 'min', 'aug', 'dim'],
+            notes: ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'],
+            duration: [1,2,3,4,6,8,12,16],
+        ),
+        currentChord: (
+            root: 0,
+            chord: "",
+            bass: 0,
+            duration: 0,
+        ),
+        chordPattern: ( // move this out to central state
+            
+        ),
+    );
+        
+    addChord = Button(win, Rect(140, 10, 30, 30)).font_(font).states_([["+"]])
+        .action_({});
+
     roots = Array.fill(12, {|i| Button(win, Rect(0, 220-(i*20), 20, 20))});
     roots.collect({|root, i| root
         .font_(font)
         .states_([
-            [labels.notes[i]],
-            [labels.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+            [state.labels.notes[i]],
+            [state.labels.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
             roots.collect({|root, index| if(i != index, {root.value = 0}) }); // reset other buttons
@@ -24,8 +39,8 @@
     chords.collect({|chord, i| chord
         .font_(font)
         .states_([
-            [labels.chords[i]],
-            [labels.chords[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+            [state.labels.chords[i]],
+            [state.labels.chords[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
             chords.collect({|chord, index| if(i != index, {chord.value = 0}) }); // reset other buttons
@@ -36,8 +51,8 @@
     bass.collect({|bs, i| bs
         .font_(font)
         .states_([
-            [labels.notes[i]],
-            [labels.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+            [state.labels.notes[i]],
+            [state.labels.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
             bass.collect({|bs, index| if(i != index, {bs.value = 0}) }); // reset other buttons
@@ -48,8 +63,8 @@
     duration.collect({|dur, i| dur
         .font_(font)
         .states_([
-            [labels.duration[i]],
-            [labels.duration[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+            [state.labels.duration[i]],
+            [state.labels.duration[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
             duration.collect({|dur, index| if(i != index, {dur.value = 0}) }); // reset other buttons
