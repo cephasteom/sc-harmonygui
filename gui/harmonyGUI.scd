@@ -1,5 +1,5 @@
 (
-	var state, win, chords, scales, roots, duration, font, font2, addChord, chordsLayout, pattern, updateButtons;
+	var state, win, scales, roots, duration, font, font2, addChord, chordsLayout, pattern, updateButtons;
 
     // ************************************************************* //
     // State ******************************************************* //
@@ -7,19 +7,14 @@
 
     state = (
         scales: [Scale.major, Scale.dorian, Scale.phrygian, Scale.lydian, Scale.mixolydian, Scale.aeolian, Scale.locrian, Scale.melodicMinor, Scale.new(#[0,1,3,5,7,9,10], name: "Dorian b2"), Scale.new(#[0,2,4,6,8,9,11], name: "Lydian Aug"), Scale.new(#[0,2,4,6,7,9,10], name: "Lydian Dom"), Scale.hindu, Scale.new(#[0,2,3,5,6,8,10], name: "Half Dim"), Scale.superLocrian],
-        labels: (
-            chords: ['maj', 'min', 'aug', 'dim'],            
-            notes: ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'],
-            duration: [1,2,3,4,6,8,12,16],
-        ),
+        notes: ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'],
+        duration: [1,2,3,4,6,8,12,16],
         currentChord: (
             root: 0,
-            chord: 0,
             scale: 0,
             duration: 0,
         ),
-        chordPattern: [ // move this out to central state
-        ],
+        chordPattern: [ ],
     );
 
     // ************************************************************* //
@@ -49,8 +44,8 @@
     roots.collect({|root, i| root
         .font_(font)
         .states_([
-            [state.labels.notes[i]],
-            [state.labels.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+            [state.notes[i]],
+            [state.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
             updateButtons.value(roots, i);
@@ -62,7 +57,7 @@
     // Scales ****************************************************** //
     // ************************************************************* //
 
-    scales = Array.fill(state.scales.size, {|i| Button(win, Rect(20+((i%3)*40), trunc(i/3)*40, 40, 40))});
+    scales = Array.fill(state.scales.size, {|i| Button(win, Rect(20+(trunc(i/6)*40), (i%6)*40, 40, 40))});
     scales.collect({|scale, i| scale
         .font_(font2)
         .states_([
@@ -83,8 +78,8 @@
     duration.collect({|dur, i| dur
         .font_(font)
         .states_([
-            [state.labels.duration[i]],
-            [state.labels.duration[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+            [state.duration[i]],
+            [state.duration[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
             updateButtons.value(duration, i);
@@ -107,24 +102,15 @@
                         [i+1, Color.grey(0.2), Color.new(254/255, 95/255, 85/255)]
                     ])
                     .action_({
-                        state.chordPattern[i].postln;
-                        state.currentChord = state.chordPattern[i].copy; // replace currentChord
                         updateButtons.value(pattern, i);
                         // update left hand buttons to show chord
-                        updateButtons.value(roots, state.currentChord.root);
-                        updateButtons.value(scales, state.currentChord.scale);
-                        updateButtons.value(duration, state.currentChord.duration);
+                        updateButtons.value(roots, state.chordPattern[i].root);
+                        updateButtons.value(scales, state.chordPattern[i].scale);
+                        updateButtons.value(duration, state.chordPattern[i].duration);
                     });
             });
             updateButtons.value(pattern, state.chordPattern.size - 1);
         });
 
 	win.onClose_({}).front;
-)
-
-
-(
-    var scale;
-    scale = Scale.minor;
-    scale.name;
 )
