@@ -95,7 +95,7 @@ s.waitForBoot({
 	ServerTree.add(~makeMidi); 
 	s.freeAll;
 	s.sync;
-	s.plotTree;
+	// s.plotTree;
 	// s.meter;
 	// 5c. NOW READY TO BEGIN PERFORMANCE
 	"Done".postln;
@@ -105,4 +105,4 @@ s.waitForBoot({
 // 6. PERFORMANCE
 // **********************************************************************
 // args in, out
-g[\harmonyGUI].value();
+// g[\harmonyGUI].value();

@@ -95,6 +95,10 @@
         addChord = Button(win, Rect(180, 10, 30, 30)).font_(font).states_([["+"]])
             .action_({
                 state.chordPattern = state.chordPattern.add(state.chordCache.copy);
+                ~data.harmony = (
+                    scale: state.scales[state.chordCache.scale], root: state.chordCache.root
+                );
+                ~data.postln;
                 pattern.collect({|ch| ch.remove}); // remove chord pattern
                 pattern = state.chordPattern.collect({|ch, i| // redraw from updated state
                     Button(win, Rect(220+((i%4)*30), trunc(i/4)*30, 30, 30)).font_(font)
@@ -103,8 +107,11 @@
                             [i+1, Color.grey(0.2), Color.new(254/255, 95/255, 85/255)]
                         ])
                         .action_({
+                            ~data.harmony = (
+                                scale: state.scales[state.chordPattern[i].scale], root: state.chordPattern[i].root
+                            );
+                            ~data.postln;
                             updateButtons.value(pattern, i);
-                            // update left hand buttons to show chord
                             updateButtons.value(roots, state.chordPattern[i].root);
                             updateButtons.value(scales, state.chordPattern[i].scale);
                             updateButtons.value(durations, state.chordPattern[i].duration);

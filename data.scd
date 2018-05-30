@@ -1,3 +1,6 @@
 ~data = (
-	scale: (),
+	harmony: (
+		scale: Scale.major,
+		root: 0, 
+	),
 );
