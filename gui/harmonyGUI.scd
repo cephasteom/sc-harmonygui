@@ -1,14 +1,9 @@
 (
-	var state, win, chords, roots, bass, duration, font, addChord, chordsLayout, pattern, updateButtons;
-    updateButtons = {|array, selected| 
-        array.collect({|item, i| 
-            if(i != selected, {item.value = 0}, {item.value = 1}) 
-        });
-    };
+	var state, win, chords, roots, duration, font, addChord, chordsLayout, pattern, updateButtons;
 
-    win = Window(\harmony, Rect(300, 300, 300, 240), false);
-    font = Font('Arial', 10);
-    chordsLayout = HLayoutView(win, Rect(180, 0, 120, 240)).background_(Color.new(254/255, 95/255, 85/255, 0.3));
+    // ************************************************************* //
+    // State ******************************************************* //
+    // ************************************************************* //
 
     state = (
         labels: (
@@ -19,12 +14,33 @@
         currentChord: (
             root: 0,
             chord: 0,
-            bass: 0,
             duration: 0,
         ),
         chordPattern: [ // move this out to central state
         ],
     );
+
+    // ************************************************************* //
+    // Functions *************************************************** //
+    // ************************************************************* //
+
+    updateButtons = {|array, selected| 
+        array.collect({|item, i| 
+            if(i != selected, {item.value = 0}, {item.value = 1}) 
+        });
+    };
+
+    // ************************************************************* //
+    // Layout******************************************************* //
+    // ************************************************************* //
+
+    win = Window(\harmony, Rect(300, 300, 300, 240), false);
+    font = Font('Arial', 10);
+    chordsLayout = HLayoutView(win, Rect(180, 0, 120, 240)).background_(Color.new(254/255, 95/255, 85/255, 0.3));
+
+    // ************************************************************* //
+    // Roots ******************************************************* //
+    // ************************************************************* //
 
     roots = Array.fill(12, {|i| Button(win, Rect(0, 220-(i*20), 20, 20))});
     roots.collect({|root, i| root
@@ -39,6 +55,10 @@
         })
     });
 
+    // ************************************************************* //
+    // Chords ****************************************************** //
+    // ************************************************************* //
+
     chords = Array.fill(4, {|i| Button(win, Rect(20, i*60, 60, 60))});
     chords.collect({|chord, i| chord
         .font_(font)
@@ -52,20 +72,11 @@
         })
     });
 
-    bass = Array.fill(12, {|i| Button(win, Rect(80, 220-(i*20), 20, 20))});
-    bass.collect({|bs, i| bs
-        .font_(font)
-        .states_([
-            [state.labels.notes[i]],
-            [state.labels.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
-        ])
-        .action_({|button|
-            updateButtons.value(bass, i);
-            state.currentChord.bass = i; // update state
-        })        
-    });
+    // ************************************************************* //
+    // Durations *************************************************** //
+    // ************************************************************* //
 
-    duration = Array.fill(12, {|i| Button(win, Rect(100, 210-(i*30), 30, 30))});
+    duration = Array.fill(12, {|i| Button(win, Rect(80, 210-(i*30), 30, 30))});
     duration.collect({|dur, i| dur
         .font_(font)
         .states_([
@@ -78,7 +89,11 @@
         })
     });
 
-    addChord = Button(win, Rect(140, 10, 30, 30)).font_(font).states_([["+"]])
+    // ************************************************************* //
+    // Add Chord Button ******************************************** //
+    // ************************************************************* //
+
+    addChord = Button(win, Rect(120, 10, 30, 30)).font_(font).states_([["+"]])
         .action_({
             state.chordPattern = state.chordPattern.add(state.currentChord.copy);
             pattern.collect({|ch| ch.remove}); // remove chord pattern
@@ -95,7 +110,6 @@
                         // update left hand buttons to show chord
                         updateButtons.value(roots, state.currentChord.root);
                         updateButtons.value(chords, state.currentChord.chord);
-                        updateButtons.value(bass, state.currentChord.bass);
                         updateButtons.value(duration, state.currentChord.duration);
                     });
             });
