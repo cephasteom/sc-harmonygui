@@ -6,7 +6,7 @@
         });
     };
 
-    win = Window(\harmony, Rect(0, 0, 300, 240), false);
+    win = Window(\harmony, Rect(300, 300, 300, 240), false);
     font = Font('Arial', 10);
     chordsLayout = HLayoutView(win, Rect(180, 0, 120, 240)).background_(Color.new(254/255, 95/255, 85/255, 0.3));
 
@@ -92,6 +92,7 @@
                         state.chordPattern[i].postln;
                         state.currentChord = state.chordPattern[i].copy; // replace currentChord
                         updateButtons.value(pattern, i);
+                        // update left hand buttons to show chord
                         updateButtons.value(roots, state.currentChord.root);
                         updateButtons.value(chords, state.currentChord.chord);
                         updateButtons.value(bass, state.currentChord.bass);
