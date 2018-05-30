@@ -9,7 +9,7 @@
         scales: [Scale.major, Scale.dorian, Scale.phrygian, Scale.lydian, Scale.mixolydian, Scale.aeolian, Scale.locrian, Scale.melodicMinor, Scale.new(#[0,1,3,5,7,9,10], name: "Dorian b2"), Scale.new(#[0,2,4,6,8,9,11], name: "Lydian Aug"), Scale.new(#[0,2,4,6,7,9,10], name: "Lydian Dom"), Scale.hindu, Scale.new(#[0,2,3,5,6,8,10], name: "Half Dim"), Scale.superLocrian],
         notes: ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'],
         duration: [1,2,3,4,6,8,12,16],
-        currentChord: (
+        chordCache: (
             root: 0,
             scale: 0,
             duration: 0,
@@ -49,7 +49,7 @@
         ])
         .action_({|button|
             updateButtons.value(roots, i);
-            state.currentChord.root = i; // update state
+            state.chordCache.root = i; // update state
         })
     });
 
@@ -66,7 +66,7 @@
         ])
         .action_({|button|
             updateButtons.value(scales, i);
-            state.currentChord.scale = i; // update state
+            state.chordCache.scale = i; // update state
         });
     });
 
@@ -83,7 +83,7 @@
         ])
         .action_({|button|
             updateButtons.value(duration, i);
-            state.currentChord.duration = i; // update state
+            state.chordCache.duration = i; // update state
         })
     });
 
@@ -93,7 +93,7 @@
 
     addChord = Button(win, Rect(180, 10, 30, 30)).font_(font).states_([["+"]])
         .action_({
-            state.chordPattern = state.chordPattern.add(state.currentChord.copy);
+            state.chordPattern = state.chordPattern.add(state.chordCache.copy);
             pattern.collect({|ch| ch.remove}); // remove chord pattern
             pattern = state.chordPattern.collect({|ch, i| // redraw from updated state
                 Button(win, Rect(220+((i%4)*30), trunc(i/4)*30, 30, 30)).font_(font)
