@@ -1,19 +1,21 @@
 (
-	var state, win, chords, roots, duration, font, addChord, chordsLayout, pattern, updateButtons;
+	var state, win, chords, scales, roots, duration, font, font2, addChord, chordsLayout, pattern, updateButtons;
 
     // ************************************************************* //
     // State ******************************************************* //
     // ************************************************************* //
 
     state = (
+        scales: [Scale.major, Scale.dorian, Scale.phrygian, Scale.lydian, Scale.mixolydian, Scale.aeolian, Scale.locrian, Scale.melodicMinor, Scale.new(#[0,1,3,5,7,9,10], name: "Dorian b2"), Scale.new(#[0,2,4,6,8,9,11], name: "Lydian Aug"), Scale.new(#[0,2,4,6,7,9,10], name: "Lydian Dom"), Scale.hindu, Scale.new(#[0,2,3,5,6,8,10], name: "Half Dim"), Scale.superLocrian],
         labels: (
-            chords: ['maj', 'min', 'aug', 'dim'],
+            chords: ['maj', 'min', 'aug', 'dim'],            
             notes: ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'],
             duration: [1,2,3,4,6,8,12,16],
         ),
         currentChord: (
             root: 0,
             chord: 0,
+            scale: 0,
             duration: 0,
         ),
         chordPattern: [ // move this out to central state
@@ -34,9 +36,10 @@
     // Layout******************************************************* //
     // ************************************************************* //
 
-    win = Window(\harmony, Rect(300, 300, 300, 240), false);
+    win = Window(\harmony, Rect(300, 300, 340, 240), false);
     font = Font('Arial', 10);
-    chordsLayout = HLayoutView(win, Rect(180, 0, 120, 240)).background_(Color.new(254/255, 95/255, 85/255, 0.3));
+    font2 = Font('Arial', 6);
+    chordsLayout = HLayoutView(win, Rect(220, 0, 120, 240)).background_(Color.new(254/255, 95/255, 85/255, 0.3));
 
     // ************************************************************* //
     // Roots ******************************************************* //
@@ -56,27 +59,27 @@
     });
 
     // ************************************************************* //
-    // Chords ****************************************************** //
+    // Scales ****************************************************** //
     // ************************************************************* //
 
-    chords = Array.fill(4, {|i| Button(win, Rect(20, i*60, 60, 60))});
-    chords.collect({|chord, i| chord
-        .font_(font)
+    scales = Array.fill(state.scales.size, {|i| Button(win, Rect(20+((i%3)*40), trunc(i/3)*40, 40, 40))});
+    scales.collect({|scale, i| scale
+        .font_(font2)
         .states_([
-            [state.labels.chords[i]],
-            [state.labels.chords[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+            [state.scales[i].name],
+            [state.scales[i].name, Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
         ])
         .action_({|button|
-            updateButtons.value(chords, i);
+            updateButtons.value(scales, i);
             state.currentChord.chord = i; // update state
-        })
+        });
     });
 
     // ************************************************************* //
     // Durations *************************************************** //
     // ************************************************************* //
 
-    duration = Array.fill(12, {|i| Button(win, Rect(80, 210-(i*30), 30, 30))});
+    duration = Array.fill(12, {|i| Button(win, Rect(140, 210-(i*30), 30, 30))});
     duration.collect({|dur, i| dur
         .font_(font)
         .states_([
@@ -93,7 +96,7 @@
     // Add Chord Button ******************************************** //
     // ************************************************************* //
 
-    addChord = Button(win, Rect(120, 10, 30, 30)).font_(font).states_([["+"]])
+    addChord = Button(win, Rect(180, 10, 30, 30)).font_(font).states_([["+"]])
         .action_({
             state.chordPattern = state.chordPattern.add(state.currentChord.copy);
             pattern.collect({|ch| ch.remove}); // remove chord pattern
@@ -117,4 +120,11 @@
         });
 
 	win.onClose_({}).front;
+)
+
+
+(
+    var scale;
+    scale = Scale.minor;
+    scale.name;
 )
