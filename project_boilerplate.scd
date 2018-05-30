@@ -13,14 +13,14 @@ if(~isHome, { // home vars
 	s.options.numOutputBusChannels_(4); 
 	s.options.numInputBusChannels_(2); 
 	s.options.sampleRate_(44100);
-	~projectPath = "/Users/Pete/Documents/my-coding/supercollider/projects/project_loopers"; // home
+	~projectPath = "/Users/Pete/Documents/my-coding/supercollider/projects/project_harmonyGUI"; // home
 	
 }, { // studio vars
 	s.options.device = "DN32-USB"; 
 	s.options.numOutputBusChannels_(8); 
 	s.options.numInputBusChannels_(8);
 	s.options.sampleRate_(48000);
-	~projectPath = "/Users/petethomas/code/project_loopers";
+	~projectPath = "/Users/petethomas/code/project_harmonyGUI";
 });
 
 s.options.memSize_(2.pow(20)); // roughly 1 gig of realtime memory
@@ -64,9 +64,7 @@ ServerQuit.removeAll;
 ~makeGui = {
 	// MIDIIn.connectAll
 	g = Dictionary.new;
-	g.add(\looperGui -> (~guiPath++"/looper_gui.scd").load);
-	g.add(\looperGui2 -> (~guiPath++"/looper_gui2.scd").load);
-	
+	g.add(\harmonyGUI -> (~guiPath++"/harmonyGUI.scd").load);	
 };
 ~makeMidi = {
 	// MIDIIn.connectAll;
@@ -107,4 +105,4 @@ s.waitForBoot({
 // 6. PERFORMANCE
 // **********************************************************************
 // args in, out
-// g[\looperGui2].value(0, 0);
+g[\harmonyGUI].value();
