@@ -101,7 +101,7 @@
             state.chordPattern = state.chordPattern.add(state.currentChord.copy);
             pattern.collect({|ch| ch.remove}); // remove chord pattern
             pattern = state.chordPattern.collect({|ch, i| // redraw from updated state
-                Button(win, Rect(180+((i%4)*30), trunc(i/4)*30, 30, 30)).font_(font)
+                Button(win, Rect(220+((i%4)*30), trunc(i/4)*30, 30, 30)).font_(font)
                     .states_([
                         [i+1],
                         [i+1, Color.grey(0.2), Color.new(254/255, 95/255, 85/255)]
