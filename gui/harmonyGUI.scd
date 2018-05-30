@@ -71,7 +71,7 @@
         ])
         .action_({|button|
             updateButtons.value(scales, i);
-            state.currentChord.chord = i; // update state
+            state.currentChord.scale = i; // update state
         });
     });
 
@@ -112,7 +112,7 @@
                         updateButtons.value(pattern, i);
                         // update left hand buttons to show chord
                         updateButtons.value(roots, state.currentChord.root);
-                        updateButtons.value(chords, state.currentChord.chord);
+                        updateButtons.value(scales, state.currentChord.scale);
                         updateButtons.value(duration, state.currentChord.duration);
                     });
             });
