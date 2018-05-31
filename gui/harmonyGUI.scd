@@ -131,7 +131,11 @@
         // Reset Button ************************************************ //
         // ************************************************************* //         
 
-        reset = Button(win, Rect(180, 90, 30, 30)).font_(font).states_([["x"]]);
+        reset = Button(win, Rect(180, 90, 30, 30)).font_(font).states_([["x"]])
+            .action_({
+                pattern.collect({|ch| ch.remove}); // remove chord pattern
+                ~data.chordPattern = [ ]; // wipe chord pattern in data
+            });
 
         // ************************************************************* //
         // Play/Pause Button ******************************************* //
