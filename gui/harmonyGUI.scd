@@ -1,6 +1,6 @@
 (
     {
-    	var state, win, scales, roots, durations, font, font2, addChord, removeChord, reset, play, chordsLayout, pattern, updateButtons, red, green;
+    	var state, win, scales, roots, font, font2, addChord, removeChord, reset, chordsLayout, pattern, updateButtons, red, green;
 
         // ************************************************************* //
         // State ******************************************************* //
@@ -9,11 +9,9 @@
         state = (
             scales: [Scale.major, Scale.dorian, Scale.phrygian, Scale.lydian, Scale.mixolydian, Scale.aeolian, Scale.locrian, Scale.melodicMinor, Scale.new(#[0,1,3,5,7,9,10], name: "Dorian b2"), Scale.new(#[0,2,4,6,8,9,11], name: "Lydian Aug"), Scale.new(#[0,2,4,6,7,9,10], name: "Lydian Dom"), Scale.hindu, Scale.new(#[0,2,3,5,6,8,10], name: "Half Dim"), Scale.superLocrian],
             notes: ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'],
-            durations: [1,2,3,4,6,8,12,16],
             chordCache: (
                 root: 0,
                 scale: 0,
-                duration: 0,
             ),
         );
 
@@ -73,23 +71,6 @@
         });
 
         // ************************************************************* //
-        // Durations *************************************************** //
-        // ************************************************************* //
-
-        durations = Array.fill(12, {|i| Button(win, Rect(140, i*30, 30, 30))});
-        durations.collect({|dur, i| dur
-            .font_(font)
-            .states_([
-                [state.durations[i], Color.grey(0.2), Color.red(0.5, 0.3)],
-                [state.durations[i], Color.white(0.2), red],
-            ])
-            .action_({|button|
-                updateButtons.value(durations, i);
-                state.chordCache.duration = i; // update state
-            })
-        });
-
-        // ************************************************************* //
         // Add Chord Button ******************************************** //
         // ************************************************************* //
 
@@ -116,7 +97,6 @@
                             updateButtons.value(pattern, i);
                             updateButtons.value(roots, ~data.chordPattern[i].root);
                             updateButtons.value(scales, ~data.chordPattern[i].scale);
-                            updateButtons.value(durations, ~data.chordPattern[i].duration);
                         });
                 });
                 // highlight new chord button
@@ -149,16 +129,6 @@
             });
 
         // ************************************************************* //
-        // Play/Pause Button ******************************************* //
-        // ************************************************************* //         
-
-        play = Button(win, Rect(180, 200, 30, 30)).font_(font)
-            .states_([
-                [">", Color.grey(0.2), Color.red(0.5, 0.1)],
-                ["||", Color.white(0.2), red],
-            ]);      
-
-        // ************************************************************* //
         // Init with saved data **************************************** //
         // ************************************************************* //
 
@@ -166,7 +136,6 @@
         // updateButtons.value(pattern, 1);
         // updateButtons.value(roots, ~data.chordPattern[1].root);
         // updateButtons.value(scales, ~data.chordPattern[1].scale);
-        // updateButtons.value(durations, ~data.chordPattern[1].duration);
 
     	win.front;
     }

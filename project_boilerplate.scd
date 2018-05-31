@@ -36,6 +36,7 @@ ServerQuit.removeAll;
 ~synthsPath = ~projectPath++"/synths";
 ~midiPath = ~projectPath++"/midi";
 ~guiPath = ~projectPath++"/gui";
+~eventsPath = ~projectPath++"/events";
 
 // **********************************************************************
 // 3. DEFINE PIECE SPECIFIC FUNCTIONS
@@ -61,10 +62,12 @@ ServerQuit.removeAll;
 	// ~reverbGroup = Group.after(~mainGroup);
 	// define more fx nodes as you need them
 };
-~makeGui = {
+~makeEvents = {
 	// MIDIIn.connectAll
-	g = Dictionary.new;
-	g.add(\harmonyGUI -> (~guiPath++"/harmonyGUI.scd").load);	
+	e = Dictionary.new;
+	e.add(\harmonyGUI -> (~guiPath++"/harmonyGUI.scd").load);	
+	e.add(\chords1 -> (~eventsPath++"/chords1.scd").load);	
+	e.add(\arp1 -> (~eventsPath++"/arp1.scd").load);	
 };
 ~makeMidi = {
 	// MIDIIn.connectAll;
@@ -83,26 +86,27 @@ ServerQuit.add(~cleanup); // clean up when quit the server
 // 5. BOOT SERVER
 // **********************************************************************
 s.waitForBoot({
-	s.sync; // ensure actions have completed before moving on (synchronous)
-	// 5a. REGISTER SYNTHDEFS
-	// (~synthsPath++"/tapDelay.scd").load;
+	s.sync; 
+	// synths
+	(~synthsPath++"/sine.scd").load;
+	(~synthsPath++"/test.scd").load;
 	s.sync;
-	// load state
+	// data
 	(~projectPath++"/data.scd").load;
-	// 5b. CREATE NODES AND EVENTS
+	// nodes and events
 	ServerTree.add(~makeNodes); 
 	ServerTree.add(~makeMidi); 
-	ServerTree.add(~makeGui); 
+	ServerTree.add(~makeEvents); 
 	s.freeAll;
 	s.sync;
 	// s.plotTree;
 	// s.meter;
-	// 5c. NOW READY TO BEGIN PERFORMANCE
 	"Done".postln;
 });
 
 // **********************************************************************
 // 6. PERFORMANCE
 // **********************************************************************
-// args in, out
-// g[\harmonyGUI].value();
+e[\harmonyGUI].value();
+e[\chords1].value();
+e[\arp1].value();
