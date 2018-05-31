@@ -3,4 +3,5 @@
 		scale: Scale.major,
 		root: 0, 
 	),
+	chordPattern: [ ],
 );

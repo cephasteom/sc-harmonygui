@@ -15,7 +15,6 @@
                 scale: 0,
                 duration: 0,
             ),
-            chordPattern: [ ],
         );
 
         // ************************************************************* //
@@ -94,13 +93,15 @@
 
         addChord = Button(win, Rect(180, 10, 30, 30)).font_(font).states_([["+"]])
             .action_({
-                state.chordPattern = state.chordPattern.add(state.chordCache.copy);
+                // add new chord to the chord pattern
+                ~data.chordPattern = ~data.chordPattern.add(state.chordCache.copy);
+                // new chord becomes new harmony 
                 ~data.harmony = (
                     scale: state.scales[state.chordCache.scale], root: state.chordCache.root
                 );
-                ~data.postln;
+                // redraw buttons
                 pattern.collect({|ch| ch.remove}); // remove chord pattern
-                pattern = state.chordPattern.collect({|ch, i| // redraw from updated state
+                pattern = ~data.chordPattern.collect({|ch, i| // redraw from updated state
                     Button(win, Rect(220+((i%4)*30), trunc(i/4)*30, 30, 30)).font_(font)
                         .states_([
                             [i+1],
@@ -108,18 +109,28 @@
                         ])
                         .action_({
                             ~data.harmony = (
-                                scale: state.scales[state.chordPattern[i].scale], root: state.chordPattern[i].root
+                                scale: state.scales[~data.chordPattern[i].scale], root: ~data.chordPattern[i].root
                             );
-                            ~data.postln;
                             updateButtons.value(pattern, i);
-                            updateButtons.value(roots, state.chordPattern[i].root);
-                            updateButtons.value(scales, state.chordPattern[i].scale);
-                            updateButtons.value(durations, state.chordPattern[i].duration);
+                            updateButtons.value(roots, ~data.chordPattern[i].root);
+                            updateButtons.value(scales, ~data.chordPattern[i].scale);
+                            updateButtons.value(durations, ~data.chordPattern[i].duration);
                         });
                 });
-                updateButtons.value(pattern, state.chordPattern.size - 1);
+                // highlight new chord button
+                updateButtons.value(pattern, ~data.chordPattern.size - 1); 
             });
 
-    	win.onClose_({}).front;
+        // ************************************************************* //
+        // Init with saved data **************************************** //
+        // ************************************************************* //
+
+        // TODO: would need to convert somethings to functions so they can be reused
+        // updateButtons.value(pattern, 1);
+        // updateButtons.value(roots, ~data.chordPattern[1].root);
+        // updateButtons.value(scales, ~data.chordPattern[1].scale);
+        // updateButtons.value(durations, ~data.chordPattern[1].duration);
+
+    	win.front;
     }
 )

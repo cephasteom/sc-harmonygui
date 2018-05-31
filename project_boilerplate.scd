@@ -91,8 +91,8 @@ s.waitForBoot({
 	(~projectPath++"/data.scd").load;
 	// 5b. CREATE NODES AND EVENTS
 	ServerTree.add(~makeNodes); 
-	ServerTree.add(~makeGui); 
 	ServerTree.add(~makeMidi); 
+	ServerTree.add(~makeGui); 
 	s.freeAll;
 	s.sync;
 	// s.plotTree;
@@ -105,4 +105,4 @@ s.waitForBoot({
 // 6. PERFORMANCE
 // **********************************************************************
 // args in, out
-// g[\harmonyGUI].value();
+g[\harmonyGUI].value()
