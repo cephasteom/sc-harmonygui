@@ -1,6 +1,6 @@
 (
     {
-    	var state, win, scales, roots, durations, font, font2, addChord, removeChord, reset, play, chordsLayout, pattern, updateButtons;
+    	var state, win, scales, roots, durations, font, font2, addChord, removeChord, reset, play, chordsLayout, pattern, updateButtons, red, green;
 
         // ************************************************************* //
         // State ******************************************************* //
@@ -34,7 +34,9 @@
         win = Window(\harmony, Rect(300, 300, 340, 240), false);
         font = Font('Arial', 10);
         font2 = Font('Arial', 6);
-        chordsLayout = HLayoutView(win, Rect(220, 0, 120, 240)).background_(Color.new(254/255, 95/255, 85/255, 0.3));
+        red = Color.red(0.5, 0.5);
+        green = Color.green(0.5, 0.5);
+        chordsLayout = HLayoutView(win, Rect(220, 0, 120, 240)).background_(Color.red(0.5, 0.5));
 
         // ************************************************************* //
         // Roots ******************************************************* //
@@ -44,8 +46,8 @@
         roots.collect({|root, i| root
             .font_(font)
             .states_([
-                [state.notes[i]],
-                [state.notes[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+                [state.notes[i], Color.grey(0.2), Color.red(0.5, 0.3)],
+                [state.notes[i], Color.white(0.2), red],
             ])
             .action_({|button|
                 updateButtons.value(roots, i);
@@ -61,8 +63,8 @@
         scales.collect({|scale, i| scale
             .font_(font2)
             .states_([
-                [state.scales[i].name],
-                [state.scales[i].name, Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+                [state.scales[i].name, Color.grey(0.2), Color.red(0.5, 0.1)],
+                [state.scales[i].name, Color.white(0.2), red],
             ])
             .action_({|button|
                 updateButtons.value(scales, i);
@@ -78,8 +80,8 @@
         durations.collect({|dur, i| dur
             .font_(font)
             .states_([
-                [state.durations[i]],
-                [state.durations[i], Color.grey(0.2), Color.new(254/255, 95/255, 85/255)],
+                [state.durations[i], Color.grey(0.2), Color.red(0.5, 0.3)],
+                [state.durations[i], Color.white(0.2), red],
             ])
             .action_({|button|
                 updateButtons.value(durations, i);
@@ -91,7 +93,7 @@
         // Add Chord Button ******************************************** //
         // ************************************************************* //
 
-        addChord = Button(win, Rect(180, 10, 30, 30)).font_(font).states_([["+"]])
+        addChord = Button(win, Rect(180, 10, 30, 30)).font_(font).states_([["+", Color.grey(0.2), Color.red(0.5, 0.1)]])
             .action_({
                 // add new chord to the chord pattern
                 ~data.chordPattern = ~data.chordPattern.add(state.chordCache.copy);
@@ -104,8 +106,8 @@
                 pattern = ~data.chordPattern.collect({|ch, i| // redraw from updated state
                     Button(win, Rect(220+((i%4)*30), trunc(i/4)*30, 30, 30)).font_(font)
                         .states_([
-                            [i+1],
-                            [i+1, Color.grey(0.2), Color.new(254/255, 95/255, 85/255)]
+                            [i+1, Color.grey(0.2), Color.red(0.5, 0.1)],
+                            [i+1, Color.white(0.2), red]
                         ])
                         .action_({
                             ~data.harmony = (
@@ -125,7 +127,7 @@
         // Remove Chord Button ***************************************** //
         // ************************************************************* //            
 
-        removeChord = Button(win, Rect(180, 50, 30, 30)).font_(font).states_([["-"]])
+        removeChord = Button(win, Rect(180, 50, 30, 30)).font_(font).states_([["-", Color.grey(0.2), Color.red(0.5, 0.1)]])
             .action_({
                 var finalChord = pattern.size - 1;
                 if (finalChord >= 0, {
@@ -139,7 +141,7 @@
         // Reset Button ************************************************ //
         // ************************************************************* //         
 
-        reset = Button(win, Rect(180, 90, 30, 30)).font_(font).states_([["x"]])
+        reset = Button(win, Rect(180, 90, 30, 30)).font_(font).states_([["x", Color.grey(0.2), Color.red(0.5, 0.1)]])
             .action_({
                 pattern.collect({|ch| ch.remove}); // remove chord pattern
                 pattern = [];
@@ -152,8 +154,8 @@
 
         play = Button(win, Rect(180, 200, 30, 30)).font_(font)
             .states_([
-                [">"],
-                ["||"],
+                [">", Color.grey(0.2), Color.red(0.5, 0.1)],
+                ["||", Color.white(0.2), red],
             ]);      
 
         // ************************************************************* //
