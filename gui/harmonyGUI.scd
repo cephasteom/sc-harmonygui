@@ -125,7 +125,15 @@
         // Remove Chord Button ***************************************** //
         // ************************************************************* //            
 
-        removeChord = Button(win, Rect(180, 50, 30, 30)).font_(font).states_([["-"]]);
+        removeChord = Button(win, Rect(180, 50, 30, 30)).font_(font).states_([["-"]])
+            .action_({
+                var finalChord = pattern.size - 1;
+                if (finalChord >= 0, {
+                    pattern[finalChord].remove; // remove final chord button
+                    pattern.removeAt(finalChord);
+                    ~data.chordPattern.removeAt(finalChord); // wipe chord pattern in data
+                });
+            });
 
         // ************************************************************* //
         // Reset Button ************************************************ //
@@ -134,6 +142,7 @@
         reset = Button(win, Rect(180, 90, 30, 30)).font_(font).states_([["x"]])
             .action_({
                 pattern.collect({|ch| ch.remove}); // remove chord pattern
+                pattern = [];
                 ~data.chordPattern = [ ]; // wipe chord pattern in data
             });
 
