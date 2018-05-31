@@ -1,6 +1,6 @@
 (
     {
-    	var state, win, scales, roots, durations, font, font2, addChord, chordsLayout, pattern, updateButtons;
+    	var state, win, scales, roots, durations, font, font2, addChord, removeChord, reset, play, chordsLayout, pattern, updateButtons;
 
         // ************************************************************* //
         // State ******************************************************* //
@@ -74,7 +74,7 @@
         // Durations *************************************************** //
         // ************************************************************* //
 
-        durations = Array.fill(12, {|i| Button(win, Rect(140, 210-(i*30), 30, 30))});
+        durations = Array.fill(12, {|i| Button(win, Rect(140, i*30, 30, 30))});
         durations.collect({|dur, i| dur
             .font_(font)
             .states_([
@@ -120,6 +120,28 @@
                 // highlight new chord button
                 updateButtons.value(pattern, ~data.chordPattern.size - 1); 
             });
+        
+        // ************************************************************* //
+        // Remove Chord Button ***************************************** //
+        // ************************************************************* //            
+
+        removeChord = Button(win, Rect(180, 50, 30, 30)).font_(font).states_([["-"]]);
+
+        // ************************************************************* //
+        // Reset Button ************************************************ //
+        // ************************************************************* //         
+
+        reset = Button(win, Rect(180, 90, 30, 30)).font_(font).states_([["x"]]);
+
+        // ************************************************************* //
+        // Play/Pause Button ******************************************* //
+        // ************************************************************* //         
+
+        play = Button(win, Rect(180, 200, 30, 30)).font_(font)
+            .states_([
+                [">"],
+                ["||"],
+            ]);      
 
         // ************************************************************* //
         // Init with saved data **************************************** //
