@@ -108,5 +108,5 @@ s.waitForBoot({
 // 6. PERFORMANCE
 // **********************************************************************
 e[\harmonyGUI].value();
-e[\chords1].value();
-e[\arp1].value();
+// e[\chords1].value();
+// e[\arp1].value();

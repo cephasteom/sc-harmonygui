@@ -8,7 +8,7 @@
 
         state = (
             scales: [Scale.major, Scale.dorian, Scale.phrygian, Scale.lydian, Scale.mixolydian, Scale.aeolian, Scale.locrian, Scale.melodicMinor, Scale.new(#[0,1,3,5,7,9,10], name: "Dorian b2"), Scale.new(#[0,2,4,6,8,9,11], name: "Lydian Aug"), Scale.new(#[0,2,4,6,7,9,10], name: "Lydian Dom"), Scale.hindu, Scale.new(#[0,2,3,5,6,8,10], name: "Half Dim"), Scale.superLocrian],
-            notes: ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'],
+            notes: ['c','c#','d','d#','e','f','f#','g','g#', 'a','a#','b'],
             chordCache: (
                 root: 0,
                 scale: 0,
@@ -30,8 +30,8 @@
         // ************************************************************* //
 
         win = Window(\harmony, Rect(0, 600, 340, 240), false);
-        font = Font('Arial', 10);
-        font2 = Font('Arial', 6);
+        font = Font('Arial', 8);
+        font2 = Font('Arial', 7);
         red = Color.red(0.5, 0.5);
         green = Color.green(0.5, 0.5);
         chordsLayout = HLayoutView(win, Rect(220, 0, 120, 240)).background_(Color.red(0.5, 0.5));
@@ -57,7 +57,7 @@
         // Scales ****************************************************** //
         // ************************************************************* //
 
-        scales = Array.fill(state.scales.size, {|i| Button(win, Rect(20+(trunc(i/6)*40), (i%6)*40, 40, 40))});
+        scales = Array.fill(state.scales.size, {|i| Button(win, Rect(20+(trunc(i/6)*50), (i%6)*40, 50, 40))});
         scales.collect({|scale, i| scale
             .font_(font2)
             .states_([
@@ -85,10 +85,12 @@
                 // redraw buttons
                 pattern.collect({|ch| ch.remove}); // remove chord pattern
                 pattern = ~data.chordPattern.collect({|ch, i| // redraw from updated state
-                    Button(win, Rect(220+((i%4)*30), trunc(i/4)*30, 30, 30)).font_(font)
+                    var name = state.scales[ch.scale].name, root = state.notes[ch.root], label;
+                    label = root++' '++name;
+                    Button(win, Rect(220+((i%2)*60), trunc(i/2)*30, 60, 30)).font_(font)
                         .states_([
-                            [i+1, Color.grey(0.2), Color.red(0.5, 0.1)],
-                            [i+1, Color.white(0.2), red]
+                            [label, Color.grey(0.2), Color.red(0.5, 0.1)],
+                            [label, Color.white(0.2), red]
                         ])
                         .action_({
                             ~data.harmony = (
