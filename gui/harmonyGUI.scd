@@ -57,12 +57,12 @@
         // Scales ****************************************************** //
         // ************************************************************* //
 
-        scales = Array.fill(state.scales.size, {|i| Button(win, Rect(20+(trunc(i/6)*50), (i%6)*40, 50, 40))});
+        scales = Array.fill(state.scales.size, {|i| Button(win, Rect(20+(trunc(i/6)*40), (i%6)*40, 40, 40))});
         scales.collect({|scale, i| scale
             .font_(font2)
             .states_([
-                [state.scales[i].name, Color.grey(0.2), Color.red(0.5, 0.1)],
-                [state.scales[i].name, Color.white(0.2), red],
+                [state.scales[i].name.replace(" ", $\n), Color.grey(0.2), Color.red(0.5, 0.1)],
+                [state.scales[i].name.replace(" ", $\n), Color.white(0.2), red],
             ])
             .action_({|button|
                 updateButtons.value(scales, i);
@@ -86,7 +86,7 @@
                 pattern.collect({|ch| ch.remove}); // remove chord pattern
                 pattern = ~data.chordPattern.collect({|ch, i| // redraw from updated state
                     var name = state.scales[ch.scale].name, root = state.notes[ch.root], label;
-                    label = root++' '++name;
+                    label = root++$\n++name;
                     Button(win, Rect(220+((i%2)*60), trunc(i/2)*30, 60, 30)).font_(font)
                         .states_([
                             [label, Color.grey(0.2), Color.red(0.5, 0.1)],
@@ -138,6 +138,14 @@
         // updateButtons.value(pattern, 1);
         // updateButtons.value(roots, ~data.chordPattern[1].root);
         // updateButtons.value(scales, ~data.chordPattern[1].scale);
+
+        // ************************************************************* //
+        // Keystrokes ************************************************** //
+        // ************************************************************* //        
+
+
+
+
 
     	win.front;
     }
