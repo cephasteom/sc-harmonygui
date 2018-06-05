@@ -68,6 +68,7 @@ ServerQuit.removeAll;
 	e.add(\harmonyGUI -> (~guiPath++"/harmonyGUI.scd").load);	
 	e.add(\chords1 -> (~eventsPath++"/chords1.scd").load);	
 	e.add(\arp1 -> (~eventsPath++"/arp1.scd").load);	
+	e.add(\randTones -> (~eventsPath++"/randBlip.scd").load);	
 };
 ~makeMidi = {
 	// MIDIIn.connectAll;
@@ -107,6 +108,14 @@ s.waitForBoot({
 // **********************************************************************
 // 6. PERFORMANCE
 // **********************************************************************
-e[\harmonyGUI].value();
-// e[\chords1].value();
-// e[\arp1].value();
+// e[\harmonyGUI].value();
+~randTones1 = e[\randTones].value(1);
+~randTones2 = e[\randTones].value(2);
+// ~randTones3 = e[\randTones].value(2);
+// ~randTones2 = e[\randTones].value(3);
+// ~randTones1.stop;
+// ~randTones2.stop;
+// ~randTones3.stop;
+
+// ~data.patterns.randBlip.instrument = \test;
+// ~data.patterns.randBlip.amp = 2;
