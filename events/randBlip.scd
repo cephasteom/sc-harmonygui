@@ -1,7 +1,7 @@
-{|oct = 1|
+{|out = 0, oct = 1, inst = \test|
 	var pattern;
 	pattern = Pbind(
-		\instrument, Pfunc { ~data.patterns.randBlip.instrument },
+		\instrument, inst,
 		\amp, Pwhite(0.1, 0.5) * Pfunc { ~data.patterns.randBlip.amp },
 		\dur, Pexprand(0.5, 2, inf) * Pfunc { ~data.patterns.randBlip.dur },
 		\scale, Pfunc { ~data.harmony.scale },
@@ -10,6 +10,7 @@
 		\nharms, (Pkey(\amp) * 3).round,
 		\pan, Pgbrown(-1, 1, 0.5, inf),
 		\rel, Pkey(\degree) * 0.2,
+		\out, out,
 	);
 
 	Ppar([pattern, pattern]).play;

@@ -91,6 +91,7 @@ s.waitForBoot({
 	// synths
 	(~synthsPath++"/sine.scd").load;
 	(~synthsPath++"/test.scd").load;
+	(~synthsPath++"/synth-fm-basic.scd").load;
 	s.sync;
 	// data
 	(~projectPath++"/data.scd").load;
@@ -108,14 +109,21 @@ s.waitForBoot({
 // **********************************************************************
 // 6. PERFORMANCE
 // **********************************************************************
-// e[\harmonyGUI].value();
-~randTones1 = e[\randTones].value(1);
-~randTones2 = e[\randTones].value(2);
-// ~randTones3 = e[\randTones].value(2);
-// ~randTones2 = e[\randTones].value(3);
-// ~randTones1.stop;
-// ~randTones2.stop;
-// ~randTones3.stop;
 
-// ~data.patterns.randBlip.instrument = \test;
+// harmony gui controller
+e[\harmonyGUI].value();
+
+// random tones
+// (out, oct, instrument)
+~randTones1 = e[\randTones].value(oct: 1);
+~randTones2 = e[\randTones].value(0, 2, \sine);
+~randTones3 = e[\randTones].value(oct: 2);
+~randTones4 = e[\randTones].value(oct: 3);
+~randTones1.stop;
+~randTones2.stop;
+~randTones3.stop;
+~randTones4.stop;
 // ~data.patterns.randBlip.amp = 2;
+// ~data.patterns.randBlip.dur = 2;
+
+

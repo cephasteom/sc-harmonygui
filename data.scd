@@ -5,6 +5,6 @@
 	),
 	chordPattern: [ ],
 	patterns: (
-		randBlip: (instrument: \test, amp: 1, dur: 1)
+		randBlip: (amp: 1, dur: 1)
 	)
 );
