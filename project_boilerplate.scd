@@ -96,11 +96,11 @@ s.waitForBoot({
 	// data
 	(~projectPath++"/data.scd").load;
 	// nodes and events
-	ServerTree.add(~makeNodes); 
-	ServerTree.add(~makeMidi); 
+	ServerTree.add(~makeNodes);
+ 	ServerTree.add(~makeMidi); 
 	ServerTree.add(~makeEvents); 
 	s.freeAll;
-	s.sync;
+	s.sync;	
 	// s.plotTree;
 	// s.meter;
 	"Done".postln;
@@ -113,17 +113,17 @@ s.waitForBoot({
 // harmony gui controller
 e[\harmonyGUI].value();
 
-// random tones
-// (out, oct, instrument)
-~randTones1 = e[\randTones].value(oct: 1);
-~randTones2 = e[\randTones].value(0, 2, \sine);
-~randTones3 = e[\randTones].value(oct: 2);
-~randTones4 = e[\randTones].value(oct: 3);
+// // random tones
+// // (out, oct, instrument)
+~randTones1 = e[\randTones].value(oct: 1, inst: \fm);
+// ~randTones2 = e[\randTones].value(0, 2, \sine);
+// ~randTones3 = e[\randTones].value(oct: 2);
+// ~randTones4 = e[\randTones].value(oct: 3);
 ~randTones1.stop;
-~randTones2.stop;
-~randTones3.stop;
-~randTones4.stop;
-// ~data.patterns.randBlip.amp = 2;
-// ~data.patterns.randBlip.dur = 2;
+// ~randTones2.stop;
+// ~randTones3.stop;
+// ~randTones4.stop;
+// // ~data.patterns.randBlip.amp = 2;
+// // ~data.patterns.randBlip.dur = 2;
 
 
